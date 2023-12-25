@@ -30,4 +30,4 @@ services:
     - his_data_base-volume:/var/lib/postgresql/data
 
 volumes:
-  tutorial-volume:
+  his_data_base-volume:
