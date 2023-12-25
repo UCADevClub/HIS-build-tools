@@ -1,0 +1,33 @@
+version: "4"
+
+services:
+  app:
+    build:
+      context: .
+    ports:
+      - "3003:3003"
+    volumes:
+      - ./HIS-back:/config
+    command: >
+      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:3003"
+    environment:
+      - DB_HOST=db
+      - DB_NAME=his_data_base
+      - DB_USER=elnazar.ulanbekuulu@outlook.com
+      - DB_PASS=secret
+    depends_on:
+      - db
+
+  db:
+    image: postgres:16.1-alpine
+    environment:
+      - POSTGRES_DB=his_data_base
+      - POSTGRES_USER=elnazar.ulanbekuulu@outlook.com
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - "5432:5432"
+    volumes:
+    - his_data_base-volume:/var/lib/postgresql/data
+
+volumes:
+  tutorial-volume:
