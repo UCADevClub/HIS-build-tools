@@ -1,26 +1,19 @@
 FROM python:3.11.3-alpine
 
 ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
 
-COPY ./requirements.txt /requirements.txt
-
-# Install postgres client
 RUN apk add --update --no-cache postgresql-client
 
-# Install individual dependencies
-# so that we could avoid install extra packages
-RUN apk add --update --no-cache --virtual .tmp-build-deps \
-	gcc libc-dev linux-headers postgresql-dev
-RUN pip install -r /requirements.txt
-
-# Remove dependencies
-RUN apk del .tmp-build-deps
-re
-RUN mkdir /app
 WORKDIR /app
-COPY ./app /app
 
-# [Security] Limit the scope of user who run the docker image
+COPY ./HIS-back/requirements.txt /app/requirements.txt
+
+RUN pip install --upgrade pip && pip install -r requirements.txt && pip freeze
+
+COPY ./HIS-back /app
+
 RUN adduser -D user
-
 USER user
+
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8088"]

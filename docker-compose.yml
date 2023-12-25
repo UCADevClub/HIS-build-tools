@@ -1,33 +1,25 @@
-version: "4"
-
+version: '4'
 services:
-  app:
+  back_end:
     build:
       context: .
+      dockerfile: Dockerfile
     ports:
-      - "3003:3003"
-    volumes:
-      - ./HIS-back:/config
-    command: >
-      sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:3003"
-    environment:
-      - DB_HOST=db
-      - DB_NAME=his_data_base
-      - DB_USER=elnazar.ulanbekuulu@outlook.com
-      - DB_PASS=secret
+      - "8088:8000"
     depends_on:
       - db
-
   db:
-    image: postgres:16.1-alpine
+    image: postgres:16.1
     environment:
-      - POSTGRES_DB=his_data_base
-      - POSTGRES_USER=elnazar.ulanbekuulu@outlook.com
-      - POSTGRES_PASSWORD=secret
+      POSTGRES_DB: his_data_base
+      POSTGRES_USER: developer
+      POSTGRES_PASSWORD: developer
     ports:
       - "5432:5432"
-    volumes:
-    - his_data_base-volume:/var/lib/postgresql/data
-
-volumes:
-  his_data_base-volume:
+  pgadmin:
+    image: dpage/pgadmin4:4.8
+    environment:
+      PGADMIN_DEFAULT_EMAIL: elnazar.ulanbekuulu@outlook.com
+      PGADMIN_DEFAULT_PASSWORD: secret
+    ports:
+      - "5050:80"
