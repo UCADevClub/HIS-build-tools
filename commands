@@ -1,0 +1,7 @@
+docker logs <container name>    ex: docker logs his-project-back_end-1 will show logs
+
+docker exec -it his-project-back_end-1 python manage.py migrate
+
+docker-compose build
+
+docker-compose up
